@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.ListView;
+import android.widget.GridView;
 
 import com.example.movie.movieproject.adapter.FragmentData;
 import com.example.movie.movieproject.adapter.FragmentListAdapter;
@@ -48,7 +48,7 @@ public class MainActivityFragment extends Fragment {
 
         adapter = new FragmentListAdapter(getActivity(), R.layout.fragment_list_single, testData);
 
-        ListView listView = (ListView) rootView.findViewById(R.id.listView);
+        GridView listView = (GridView) rootView.findViewById(R.id.listView);
 
         listView.setAdapter(adapter);
         listView.setOnScrollListener(new ListViewScrollListener(listView));
@@ -62,9 +62,9 @@ public class MainActivityFragment extends Fragment {
         int pageFetched = 1;
         int previousTotalCount;
 
-        ListView listView;
+        GridView listView;
 
-        public ListViewScrollListener(ListView listView) {
+        public ListViewScrollListener(GridView listView) {
             this.listView = listView;
         }
 
@@ -120,7 +120,7 @@ public class MainActivityFragment extends Fragment {
                 JSONObject resultObject = resultList.getJSONObject(i);
                 String title = resultObject.getString("original_title");
                 String poster_path = resultObject.getString("poster_path");
-                String imageBaseURL = "http://image.tmdb.org/t/p/w185/";
+                String imageBaseURL = "http://image.tmdb.org/t/p/w500/";
                 String imageURL = imageBaseURL + poster_path;
                 fragmentDataList[i] = new FragmentData(imageURL, title);
             }
