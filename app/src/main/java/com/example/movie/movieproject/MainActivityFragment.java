@@ -1,8 +1,10 @@
 package com.example.movie.movieproject;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +35,8 @@ public class MainActivityFragment extends Fragment {
     private String LOG_TAG = MainActivityFragment.class.getSimpleName();
 
     FragmentListAdapter adapter;
+
+    static boolean activityStarted = false;
 
     static int pagesFetched = 0;
 
@@ -85,19 +89,39 @@ public class MainActivityFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        fetchNextPage(1);
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        pagesFetched = 0 ;
+        super.onStop();
+    }
 
     void fetchNextPage(int i) {
         if (i > pagesFetched) {
             pagesFetched++;
             Log.d(LOG_TAG, "Fetching page " + pagesFetched);
-            new FetchMovieInformationTask(getActivity()).execute(Integer.toString(pagesFetched));
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String prefsString = prefs.getString("movie_pref_list",
+                    "popularity.desc");
+            Log.d(LOG_TAG,"sort_order=" + prefsString);
+            new FetchMovieInformationTask(getActivity()).execute(Integer.toString(pagesFetched),prefsString);
         }
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        fetchNextPage(1);
+        activityStarted = true;
     }
 
     class FetchMovieInformationTask extends AsyncTask<String, Void, FragmentData[]> {
@@ -135,14 +159,18 @@ public class MainActivityFragment extends Fragment {
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
             String pgNumber = "1";
+            String pref = "popularity.desc";
             if (params.length > 0) {
                 pgNumber = params[0];
+            }
+            if(params.length>1){
+                pref = params[1];
             }
             try {
 
                 String apiKey = getActivity().getResources().getString(R.string.moviedbkey);
                 String MOVIE_QUERY_URL =
-                        "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=" + apiKey + "&page=" + pgNumber;
+                        "http://api.themoviedb.org/3/discover/movie?sort_by="+pref +"&api_key=" + apiKey + "&page=" + pgNumber;
                 String queriedData;
 
                 URL url = new URL(MOVIE_QUERY_URL);
@@ -189,8 +217,10 @@ public class MainActivityFragment extends Fragment {
         @Override
         protected void onPostExecute(FragmentData[] fragmentDatas) {
             //adapter.clear();
-            for (FragmentData data : fragmentDatas) {
-                adapter.add(data);
+            if (fragmentDatas != null) {
+                for (FragmentData data : fragmentDatas) {
+                    adapter.add(data);
+                }
             }
         }
     }

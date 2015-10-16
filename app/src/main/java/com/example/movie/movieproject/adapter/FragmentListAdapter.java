@@ -36,6 +36,11 @@ public class FragmentListAdapter extends ArrayAdapter<FragmentData> {
         ImageView imageView = (ImageView)rootView.findViewById(R.id.icon_img);
         Picasso.with(context).load(objects.get(position).getImageURI()).into(imageView);
         return rootView;
+    }
 
+    @Override
+    public void remove(FragmentData object) {
+        Picasso.with(context).invalidate(object.getImageURI());
+        super.remove(object);
     }
 }
