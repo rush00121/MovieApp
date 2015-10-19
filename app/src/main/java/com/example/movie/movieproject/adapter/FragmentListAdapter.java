@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
+import com.example.movie.movieproject.ImageClickListener;
 import com.example.movie.movieproject.R;
 import com.squareup.picasso.Picasso;
 
@@ -32,15 +33,23 @@ public class FragmentListAdapter extends ArrayAdapter<FragmentData> {
         LayoutInflater inflater = context.getLayoutInflater();
         View rootView = inflater.inflate(R.layout.fragment_list_single, null, true);
         //TextView textView = (TextView)rootView.findViewById(R.id.fragment_text);
-      //  textView.setText(objects.get(position).getData());
+      //  textView.setText(objects.get(position).getMovieId());
         ImageView imageView = (ImageView)rootView.findViewById(R.id.icon_img);
         Picasso.with(context).load(objects.get(position).getImageURI()).into(imageView);
+
+        imageView.setOnClickListener(new ImageClickListener(context,objects.get(position).getMovieId(),objects.get(position).getImageURI()));
+
         return rootView;
     }
 
-    @Override
-    public void remove(FragmentData object) {
-        Picasso.with(context).invalidate(object.getImageURI());
-        super.remove(object);
-    }
+
+
+
+
+
+//    @Override
+//    public void remove(FragmentData object) {
+//    //    Picasso.with(context).invalidate(object.getImageURI());
+//        super.remove(object);
+//    }
 }

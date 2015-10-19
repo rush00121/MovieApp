@@ -55,7 +55,10 @@ public class MainActivityFragment extends Fragment {
         GridView listView = (GridView) rootView.findViewById(R.id.listView);
 
         listView.setAdapter(adapter);
-        listView.setOnScrollListener(new ListViewScrollListener(listView));
+      //  listView.setOnScrollListener(new ListViewScrollListener(listView));
+
+        //ImageView imageView = (ImageView)rootView.findViewById(R.id.icon_img);
+
 
         return rootView;
     }
@@ -142,11 +145,11 @@ public class MainActivityFragment extends Fragment {
             FragmentData[] fragmentDataList = new FragmentData[resultList.length()];
             for (int i = 0; i < resultList.length(); i++) {
                 JSONObject resultObject = resultList.getJSONObject(i);
-                String title = resultObject.getString("original_title");
+                String id = resultObject.getString("id");
                 String poster_path = resultObject.getString("poster_path");
                 String imageBaseURL = "http://image.tmdb.org/t/p/w500/";
                 String imageURL = imageBaseURL + poster_path;
-                fragmentDataList[i] = new FragmentData(imageURL, title);
+                fragmentDataList[i] = new FragmentData(imageURL, id);
             }
 
             return fragmentDataList;

@@ -6,17 +6,17 @@ package com.example.movie.movieproject.adapter;
 public class FragmentData {
 
     private String imageURI;
-    private String data;
+    private String movieId;
 
-    public FragmentData(String imageURI, String data) {
+    public FragmentData(String imageURI, String movieId) {
         this.imageURI = imageURI;
-        this.data = data;
+        this.movieId = movieId;
     }
 
     public String getImageURI() {
         return imageURI;
     }
-    public String getData() {
-        return data;
+    public String getMovieId() {
+        return movieId;
     }
 }
